@@ -5,7 +5,6 @@ import nextCookie from 'next-cookies'
 import Layout from '~/components/layout'
 import cookie from 'js-cookie'
 import PropTypes from 'prop-types'
-import { DocumentContext } from 'next/document'
 import { withAuthSync } from '~/utils/auth'
 
 import Pagination from 'material-ui-flat-pagination'
@@ -35,7 +34,7 @@ import MenuItem from '@material-ui/core/MenuItem'
  * Object: WordListData
  *
  * @typedef {Object} WordListData
- * @property {Array<{id: Number, word: String, type_id: number }>} rows  All rows for this page only
+ * @property {Array<{id: Number, word: String, type: string }>} rows  All rows for this page only
  * @property {Number} page  Current page - Integer
  * @property {Number} pageCount  Total pages - Integer
  * @property {Number} rowsPerPage  Rows per page - Integer
@@ -45,7 +44,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 /**
  * Fetch WordListData and pagination
  *
- * @param {DocumentContext} ctx
+ * @param {Object} ctx
  * @return {WordListData|Number}  WordListData | statusCode
  */
 EnhancedTable.getInitialProps = async ctx => {
@@ -308,8 +307,9 @@ function EnhancedTable({
   pageCount,
   rowsPerPage,
   totalRows,
-  token,
+  ...props
 }) {
+  const token = props.token
   const css = EnhancedTableCSS()
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('id')
@@ -362,7 +362,7 @@ function EnhancedTable({
   const pageTo = Math.min(page * rowsPerPage, totalRows)
 
   return (
-    <Layout token={token} onPage="profile">
+    <Layout token={token} onPage="wordlist">
       <div className={css.root}>
         <Paper className={css.paper}>
           <EnhancedTableToolbar numSelected={selected.length} />
